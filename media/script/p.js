@@ -1,3 +1,5 @@
+var API_ENDPOINT = "https://api.adivinhe.com/";
+
 debug = false;
 debuggingBox = new debuggingBox(false, 'top-left', 'debuggingBox');
 
@@ -17,11 +19,11 @@ var palco = function() {
     var ferramentas = {};
     var ferramenta = 'pincel';
 
-    // Informações de comunicação	
+    // Informações de comunicação
     var cronometro = false;
     var cronometro_tempo = false;
     //var ultimoDado = 0;
-    //var dados_fila = []; 
+    //var dados_fila = [];
     //var dados_fila_tempo = false;
     // Número de mensagens exibidas (utilidade: apagar antigas) / Últimas mensagens (anti-flood) / modo alt
     var dados_chat = [1, 1, null, null, false, false];
@@ -75,7 +77,7 @@ var palco = function() {
         document.addEventListener('mousedown', _self.gerenciador, false);
         document.addEventListener('mousemove', _self.gerenciador, false);
         document.addEventListener('mouseup', _self.gerenciador, false);
-        //document.addEventListener('mouseout',		_self.gerenciador, false);		
+        //document.addEventListener('mouseout',		_self.gerenciador, false);
 
         /**
          * SCROLL
@@ -193,7 +195,7 @@ var palco = function() {
         });
 
         /**
-         * REGISTRO	
+         * REGISTRO
          **/
         current_recaptcha = 0;
         registrando = false;
@@ -252,7 +254,7 @@ var palco = function() {
             }
             $.ajax({
                 type: 'POST',
-                url: '/dados/registrar',
+                url: API_ENDPOINT + 'registrar',
                 data: {
                     nick: nick,
                     senha: password,
@@ -387,7 +389,7 @@ var palco = function() {
 
         logando = false;
         login_recaptcha = false;
-        // Normal 
+        // Normal
         $('#l_form, #c_rc_f').submit(function() {
             if (current_recaptcha != 2 && $(this).attr('id') == 'c_rc_f') {
                 return false;
@@ -407,7 +409,7 @@ var palco = function() {
             logando = true;
             $.ajax({
                 type: 'POST',
-                url: '/dados/login?modo=normal',
+                url: API_ENDPOINT + 'login?modo=normal',
                 data: {
                     nick: $('#l_nick').val(),
                     senha: $('#l_password').val(),
@@ -441,7 +443,7 @@ var palco = function() {
             de_enviando = true;
             $.ajax({
                 type: 'POST',
-                url: '/dados/login?modo=dados_incompletos',
+                url: API_ENDPOINT + 'login?modo=dados_incompletos',
                 data: {
                     nick: ($('#fil_nick') ? $('#fil_nick').val() : ''),
                     email: ($('#fil_email') ? $('#fil_email').val() : '')
@@ -472,7 +474,7 @@ var palco = function() {
         $('#login #external li').click(function() {
             var modo = $(this).attr('id').replace('e_', '');
             var dimensoes = (modo == 'msn' ? [465, 375] : [640, 420]);
-            var url = 'http://adivinhe.com/dados/login?modo=' + modo;
+            var url = API_ENDPOINT + 'login?modo=' + modo;
             popupLogin = window.open(url, "Login Adivinhe", "width=" + dimensoes[0] + ",height=" + dimensoes[1] + ",status=yes,toolbar=no,menubar=no,location=yes,resizable=yes,scrollbars=yes");
             $('#malha').css('display', 'block');
             $('#c_social').css({
@@ -489,7 +491,7 @@ var palco = function() {
                         clearInterval(checkpopupLogin);
                         $.ajax({
                             type: 'GET',
-                            url: '/dados/login?modo=recupera',
+                            url: API_ENDPOINT + 'login?modo=recupera',
                             dataType: 'json',
                             beforeSend: function() {
                                 $('#social_conteudo').html('Processando...');
@@ -615,7 +617,7 @@ var palco = function() {
             editando = true;
             $.ajax({
                 type: 'POST',
-                url: '/dados/editar?token=' + dados_usuario.token,
+                url: API_ENDPOINT + 'editar?token=' + dados_usuario.token,
                 data: {
                     id: dados_usuario.id,
                     nick: $('#c_cf_nick').val(),
@@ -660,7 +662,7 @@ var palco = function() {
             contatando = true;
             $.ajax({
                 type: 'POST',
-                url: '/dados/contato?token=' + dados_usuario.token,
+                url: API_ENDPOINT + 'contato?token=' + dados_usuario.token,
                 data: {
                     assunto: $('#c_ct_motivo').val(),
                     texto: $('#c_ct_texto').val()
@@ -1172,7 +1174,7 @@ var palco = function() {
 
         $.ajax({
             type: 'GET',
-            url: '/dados/recebe?token=' + dados_usuario.token,
+            url: API_ENDPOINT + 'recebe?token=' + dados_usuario.token,
             dataType: 'json',
             error: function() {
                 _self.tentaReconectar();
@@ -1198,25 +1200,25 @@ var palco = function() {
     /*this.enviaDadosFila = function(dados)
     {
     	if(dados) {
-    		dados_fila = dados_fila.concat(dados);			
+    		dados_fila = dados_fila.concat(dados);
     	}
-    	
+
     	if(dados_fila_tempo == false)
     	{
     		dados_fila_tempo = true;
     		setTimeout(function(){
-    			var max = 2;		
-    			var n_fila = dados_fila.length;	
+    			var max = 2;
+    			var n_fila = dados_fila.length;
     			var divide = (n_fila >= max);
-    			var envia = (divide ? dados_fila.slice(0, n_fila) : dados_fila);				
+    			var envia = (divide ? dados_fila.slice(0, n_fila) : dados_fila);
     			_self.enviaDados(envia);
     			dados_fila = (divide ? dados_fila.slice(n_fila) : []);
     			dados_fila_tempo = false;
     			if(divide && dados_fila.length) {
     				_self.enviaDadosFila();
     			}
-    		}, 500);	
-    	}	
+    		}, 500);
+    	}
     };*/
 
     this.enviaDados = function(dados) {
@@ -1230,7 +1232,7 @@ var palco = function() {
 
         $.ajax({
             type: 'POST',
-            url: '/dados/envia?token=' + dados_usuario.token,
+            url: API_ENDPOINT + 'envia?token=' + dados_usuario.token,
             data: {
                 'dados': JSON.stringify(dados)
             },
@@ -1776,7 +1778,7 @@ var palco = function() {
                     }
                 }
 
-                // Pixel atual			
+                // Pixel atual
                 if (__self.pixelValido(x, atual_y)) {
                     _self.pintaPixel(x, atual_y);
                 } else {
@@ -2088,7 +2090,7 @@ var palco = function() {
             _self.limpa2();
             __self.clicando = false;
 
-            // Desenha circulo real			
+            // Desenha circulo real
             var raio_x = Math.ceil((ev._x - __self.x0) / 2);
             var raio_y = Math.ceil((ev._y - __self.y0) / 2);
             var center_x = __self.x0 + raio_x;
@@ -2229,7 +2231,7 @@ $('document').ready(function() {
 
 window.onbeforeunload = function() {
     $.ajax({
-        url: '/dados/sair',
+        url: API_ENDPOINT + 'sair',
         async: false
     });
 };
