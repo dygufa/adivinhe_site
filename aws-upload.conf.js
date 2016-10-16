@@ -3,6 +3,6 @@ module.exports = {
     bucketName:"adivinhe-site",
     patterns:[
         "index.html",
-        "media/*"
+        "media/**/*"
     ]
 }
