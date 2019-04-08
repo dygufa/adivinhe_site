@@ -1,9 +1,10 @@
 var API_ENDPOINT = "https://api.adivinhe.com/";
+// var API_ENDPOINT = "http://localhost:5089/";
 
 debug = false;
 debuggingBox = new debuggingBox(false, 'top-left', 'debuggingBox');
 
-var palco = function() {
+var palco = function () {
     var _self = this;
 
     // Configurações
@@ -36,8 +37,8 @@ var palco = function() {
     var click_active = false;
     var acertou = false;
 
-    this.inicia = function() {
-        document.onselectstart = function() {
+    this.inicia = function () {
+        document.onselectstart = function () {
             if (tela == 'jogo' && desenhista == dados_usuario.id) {
                 return false;
             }
@@ -68,9 +69,9 @@ var palco = function() {
         context.lineWidth = context2.lineWidth = tamanho;
 
         // Indexa eventos
-        $('#canvas, #canvas2').hover(function() {
+        $('#canvas, #canvas2').hover(function () {
             palco_foco = true;
-        }, function() {
+        }, function () {
             palco_foco = false;
         });
         document.addEventListener('click', _self.gerenciador, false);
@@ -92,14 +93,14 @@ var palco = function() {
         /**
          *	ENVIA MENSAGENS
          **/
-        $('#form-chat-resposta').submit(function() {
+        $('#form-chat-resposta').submit(function () {
             var msg = $('#input-mensagem-resposta').val();
             if (msg.match(/^\/staf/)) {
                 $('#c_cs').css('visibility', 'visible');
                 $('#input-mensagem-resposta').val('');
                 return false;
             }
-            if (msg == '' /*|| msg == dados_chat[2]*/ ) {
+            if (msg == '' /*|| msg == dados_chat[2]*/) {
                 return false;
             }
             dados_chat[2] = msg;
@@ -110,14 +111,14 @@ var palco = function() {
             return false;
         });
 
-        $('#form-chat-conversa').submit(function() {
+        $('#form-chat-conversa').submit(function () {
             var msg = $('#input-mensagem-conversa').val();
             if (msg.match(/^\/staf/)) {
                 $('#c_cs').css('visibility', 'visible');
                 $('#input-mensagem-conversa').val('');
                 return false;
             }
-            if (msg == '' /*|| msg == dados_chat[3]*/ ) {
+            if (msg == '' /*|| msg == dados_chat[3]*/) {
                 return false;
             }
             dados_chat[3] = msg;
@@ -133,7 +134,7 @@ var palco = function() {
          **/
 
         $('#g_ferramentas li').hover(
-            function() {
+            function () {
                 if ($(this).attr('class').indexOf('selecionada') != '-1') {
                     return;
                 }
@@ -142,7 +143,7 @@ var palco = function() {
                     'background-position': (parseInt(position[0]) - 80) + 'px ' + position[1]
                 }).data('hover', 's');
             },
-            function() {
+            function () {
                 if ($(this).attr('class').indexOf('selecionada') != '-1') {
                     return;
                 }
@@ -153,7 +154,7 @@ var palco = function() {
             }
         );
 
-        $('#g_ferramentas li').click(function() {
+        $('#g_ferramentas li').click(function () {
             var new_ferramenta = $(this).attr('id').replace('f_', '');
 
             if (new_ferramenta == 'limpar') {
@@ -169,7 +170,7 @@ var palco = function() {
                 if (new_ferramenta == ferramenta) {
                     return;
                 }
-                var nohover = ($(this).data('hover') == 'n' || typeof($(this).data('hover')) == 'undefined');
+                var nohover = ($(this).data('hover') == 'n' || typeof ($(this).data('hover')) == 'undefined');
                 //alert($(this).data('hover') + ' - ' + (nohover ? '1' : '0'));
                 var position = $('.selecionada').css('background-position').replace('px', '').split(' ');
                 $('.selecionada').css({
@@ -186,7 +187,7 @@ var palco = function() {
             }
         });
 
-        $('#g_cores li').click(function() {
+        $('#g_cores li').click(function () {
             var cor = $(this).attr('id').replace('c_', '');
             _self.defineCor('#' + cor);
 
@@ -200,11 +201,11 @@ var palco = function() {
         current_recaptcha = 0;
         registrando = false;
         register_recaptcha = false;
-        $('#b_registrar').click(function() {
+        $('#b_registrar').click(function () {
             $('#c_registro').css('visibility', 'visible');
         });
 
-        $('#r_form, #c_rc_f').submit(function() {
+        $('#r_form, #c_rc_f').submit(function () {
             if (current_recaptcha != 1 && $(this).attr('id') == 'c_rc_f') {
                 return false;
             }
@@ -263,14 +264,14 @@ var palco = function() {
                     recaptcha_challenge: $('#recaptcha_challenge_field').val(),
                     recaptcha_response: $('#recaptcha_response_field').val()
                 },
-                complete: function() {
+                complete: function () {
                     registrando = false;
                 },
-                error: function() {
+                error: function () {
                     _self.newPopup('Falha de conexão!', 'Por favor, tente novamente mais tarde. Não consigo, no momento, manter contato com o servidor, este erro pode ocorrer por uma interrupção na sua internet ou por uma falha no nosso sistema. Desculpe-me.', true);
                 },
                 dataType: 'json',
-                success: function(res) {
+                success: function (res) {
                     if (!res[0] || res[1] == 2) {
                         var title = 'Prontinho';
                         var msg = 'Acabei de te registrar!';
@@ -307,7 +308,7 @@ var palco = function() {
         /**
          *	LOGIN
          **/
-        login = function(res, normal) {
+        login = function (res, normal) {
             if (res[0]) {
                 if (normal) {
                     login_recaptcha = false;
@@ -352,7 +353,7 @@ var palco = function() {
                 _self.defineTela('jogo');
                 _self.recebeDados();
             } else {
-                var switch_error = (typeof(res[1]) == 'object' ? res[1][0] : res[1]);
+                var switch_error = (typeof (res[1]) == 'object' ? res[1][0] : res[1]);
                 switch (switch_error) {
                     case 'crowded':
                         _self.newPopup('Lotado!', 'Pedimos mil desculpas! O jogo está lotado. Tente mais tarde. Estamos trabalhando para aumentar a capacidade de jogadores. <b>:(</b>', true);
@@ -390,7 +391,7 @@ var palco = function() {
         logando = false;
         login_recaptcha = false;
         // Normal
-        $('#l_form, #c_rc_f').submit(function() {
+        $('#l_form, #c_rc_f').submit(function () {
             if (current_recaptcha != 2 && $(this).attr('id') == 'c_rc_f') {
                 return false;
             }
@@ -410,6 +411,10 @@ var palco = function() {
             $.ajax({
                 type: 'POST',
                 url: API_ENDPOINT + 'login?modo=normal',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
                 data: {
                     nick: $('#l_nick').val(),
                     senha: $('#l_password').val(),
@@ -418,16 +423,16 @@ var palco = function() {
                     recaptcha_response: $('#recaptcha_response_field').val()
                 },
                 dataType: 'json',
-                beforeSend: function() {
+                beforeSend: function () {
                     $('#l_password').val('');
                 },
-                complete: function() {
+                complete: function () {
                     logando = false;
                 },
-                error: function() {
+                error: function () {
                     _self.newPopup('Falha de conexão!', 'Por favor, tente novamente mais tarde. Não consigo, no momento, manter contato com o servidor, este erro pode ocorrer por uma interrupção na sua internet ou por uma falha no nosso sistema. Desculpe-me.', true);
                 },
-                success: function(res) {
+                success: function (res) {
                     login(res, true);
                 }
             });
@@ -436,7 +441,7 @@ var palco = function() {
 
         de_enviando = false;
         // Dados extras
-        $('#f_i_l').live('submit', function() {
+        $('#f_i_l').live('submit', function () {
             if (de_enviando) {
                 return false;
             }
@@ -449,15 +454,15 @@ var palco = function() {
                     email: ($('#fil_email') ? $('#fil_email').val() : '')
                 },
                 dataType: 'json',
-                beforeSend: function() {
+                beforeSend: function () {
                     $('#fil_status').css('display', 'block').html('Verificando...');
                 },
-                complete: function() {
+                complete: function () {
                     de_enviando = false;
                 },
-                success: function(res) {
+                success: function (res) {
                     if (res[0] == 'error') {
-                        $('#fil_status').html((typeof(res[1]) == 'object' ? res[1][1] : res[1]));
+                        $('#fil_status').html((typeof (res[1]) == 'object' ? res[1][1] : res[1]));
                     } else if (res[0] == 'success') {
                         $('#malha').css('display', 'none');
                         $('#c_social').css({
@@ -471,7 +476,7 @@ var palco = function() {
         });
 
         // Redes sociais
-        $('#login #external li').click(function() {
+        $('#login #external li').click(function () {
             var modo = $(this).attr('id').replace('e_', '');
             var dimensoes = (modo == 'msn' ? [465, 375] : [640, 420]);
             var url = API_ENDPOINT + 'login?modo=' + modo;
@@ -486,27 +491,27 @@ var palco = function() {
                 'font-size': '18px'
             }).html('Aguardando...');
             var checkpopupLogin = setInterval(
-                function() {
+                function () {
                     if (popupLogin.closed || !popupLogin || typeof popupLogin.closed == 'undefined') {
                         clearInterval(checkpopupLogin);
                         $.ajax({
                             type: 'GET',
                             url: API_ENDPOINT + 'login?modo=recupera',
                             dataType: 'json',
-                            beforeSend: function() {
+                            beforeSend: function () {
                                 $('#social_conteudo').html('Processando...');
                             },
-                            error: function() {
+                            error: function () {
                                 $('#social_conteudo').html('Falha de conexão. "/');
                             },
-                            success: function(res) {
+                            success: function (res) {
                                 $('#social_conteudo').css({
                                     'text-align': 'left',
                                     'font-size': '14px'
                                 });
                                 switch (res[0]) {
                                     case 'error':
-                                        $('#social_conteudo').html((typeof(res[1]) == 'object' ? res[1][1] : res[1]));
+                                        $('#social_conteudo').html((typeof (res[1]) == 'object' ? res[1][1] : res[1]));
                                         break;
                                     case 'success':
                                         $('#malha').css('display', 'none');
@@ -552,7 +557,7 @@ var palco = function() {
          * Console administrativo
          **/
 
-        $('#c_cs_f').submit(function() {
+        $('#c_cs_f').submit(function () {
             var msg = $('#c_cs_texto').val();
             if (msg != '') {
                 $('#c_cs_tela ul').append('<li class="comando">> ' + msg + '</li>');
@@ -582,7 +587,7 @@ var palco = function() {
 			$(this).animate({'margin-top': '0'}, 250);
 		});*/
 
-        $('#menu li').click(function() {
+        $('#menu li').click(function () {
             var key = $(this).attr('id').replace('m_', '');
             if (key == 'cf') {
                 $('#c_cf_nick').val(dados_usuario.nick);
@@ -593,7 +598,7 @@ var palco = function() {
             });
         });
 
-        $('.c_fechar').click(function() {
+        $('.c_fechar').click(function () {
             $(this).closest('.flying_box').css({
                 'visibility': 'hidden'
             });
@@ -610,13 +615,16 @@ var palco = function() {
 
         // Configurações
         editando = false;
-        $('#c_cf_f').submit(function() {
+        $('#c_cf_f').submit(function () {
             if (editando) {
                 return false;
             }
             editando = true;
             $.ajax({
                 type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', "Bearer " + dados_usuario.jwtToken);
+                },
                 url: API_ENDPOINT + 'editar?token=' + dados_usuario.token,
                 data: {
                     id: dados_usuario.id,
@@ -626,18 +634,18 @@ var palco = function() {
                     atual_senha: $('#c_cf_oldpw').val()
                 },
                 dataType: 'json',
-                beforeSend: function() {
+                beforeSend: function () {
                     $('#c_cf_button').val('Atualizando...');
                 },
-                complete: function() {
+                complete: function () {
                     $('#c_cf_newpw, #c_cf_oldpw').val('');
                     editando = false;
                     $('#c_cf_button').val('Atualizar');
                 },
-                error: function() {
+                error: function () {
                     _self.newPopup('Falha de conexão!', 'Por favor, tente novamente mais tarde. Não consigo, no momento, manter contato com o servidor, este erro pode ocorrer por uma interrupção na sua internet ou por uma falha no nosso sistema. Desculpe-me.', true);
                 },
-                success: function(res) {
+                success: function (res) {
                     if (res.length == 1) {
                         _self.executaErros(res[0]);
                     } else {
@@ -655,23 +663,26 @@ var palco = function() {
 
         // Contato
         contatando = false;
-        $('#c_ct_f').submit(function() {
+        $('#c_ct_f').submit(function () {
             if (contatando) {
                 return false;
             }
             contatando = true;
             $.ajax({
                 type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', "Bearer " + dados_usuario.jwtToken);
+                },
                 url: API_ENDPOINT + 'contato?token=' + dados_usuario.token,
                 data: {
                     assunto: $('#c_ct_motivo').val(),
                     texto: $('#c_ct_texto').val()
                 },
                 dataType: 'json',
-                beforeSend: function() {
+                beforeSend: function () {
                     $('#c_ct_button').val('Enviando...');
                 },
-                complete: function() {
+                complete: function () {
                     $('#c_ct').css({
                         'visibility': 'hidden'
                     });
@@ -679,10 +690,10 @@ var palco = function() {
                     contatando = false;
                     $('#c_ct_button').val('Enviar');
                 },
-                error: function() {
+                error: function () {
                     _self.newPopup('Falha de conexão!', 'Por favor, tente novamente mais tarde. Não consigo, no momento, manter contato com o servidor, este erro pode ocorrer por uma interrupção na sua internet ou por uma falha no nosso sistema. Desculpe-me.', true);
                 },
-                success: function(res) {
+                success: function (res) {
                     if (res.length == 1) {
                         _self.executaErros(res[0]);
                     } else {
@@ -728,26 +739,26 @@ var palco = function() {
 		*/
 
         // Comandos
-        $('#o_pular').click(function() {
+        $('#o_pular').click(function () {
             _self.enviaDados([
                 [14]
             ]);
         });
 
-        $('#o_dica').click(function() {
+        $('#o_dica').click(function () {
             _self.enviaDados([
                 [15]
             ]);
         });
 
-        $('#o_denunciar').click(function() {
+        $('#o_denunciar').click(function () {
             _self.enviaDados([
                 [16]
             ]);
         });
     };
 
-    this.newPopup = function(titulo, texto, escurecer) {
+    this.newPopup = function (titulo, texto, escurecer) {
         $('#e_titulo').html(titulo);
         $('#e_descricao').html(texto);
         $('#c_e').css({
@@ -760,7 +771,7 @@ var palco = function() {
         }
     };
 
-    this.defineTela = function(nova_tela) {
+    this.defineTela = function (nova_tela) {
         if (tela == nova_tela) {
             return;
         }
@@ -802,23 +813,23 @@ var palco = function() {
         }
     };
 
-    this.dadosUsuario = function(obj) {
+    this.dadosUsuario = function (obj) {
         dados_usuario = obj;
     };
 
-    this.geraListaJogadores = function() {
+    this.geraListaJogadores = function () {
         arrJogadores = [];
         for (var i in jogadores) {
             arrJogadores.push(jogadores[i]);
         }
-        var sortNumber = function(a, b) {
+        var sortNumber = function (a, b) {
             return b.pontos - a.pontos;
         };
         arrJogadores.sort(sortNumber);
         html = '';
         alt = false;
         for (var i = 0, t = arrJogadores.length; i < t; i++) {
-            if (typeof(arrJogadores[i]) !== 'object') continue;
+            if (typeof (arrJogadores[i]) !== 'object') continue;
             var jogador = arrJogadores[i];
             html += '<div class="jogador ' + (alt ? 'alt' : '') + ' ' + (desenhista == jogador.id ? 'desenhando' : '') + '">';
             html += '<div class="avatar" ' + (jogador.imagem ? 'style="background-image: url(' + jogador.imagem + ');"' : '') + '></div>';
@@ -836,7 +847,7 @@ var palco = function() {
         for (var i = 0, t = rank.length; i < t; i++) {
             var info_rank = rank[i];
             var info_jogador = jogadores[info_rank[0]];
-            if (typeof(info_jogador) !== 'object') continue;
+            if (typeof (info_jogador) !== 'object') continue;
             html += '<div class="jogador ' + (alt ? 'alt' : '') + '">';
             html += '<div class="avatar" ' + (info_jogador.imagem ? 'style="background-image: url(' + info_jogador.imagem + ');"' : '') + '></div>';
             html += '<div class="info">';
@@ -855,13 +866,13 @@ var palco = function() {
         $('#placar_geral').tinyscrollbar_update();
     };
     // crir = contagem regrssiva para inicio de rodada
-    this.cronometro = function(restante, crir) {
+    this.cronometro = function (restante, crir) {
         if (cronometro !== false) {
             clearInterval(cronometro);
         }
         tempo_original = restante;
         cronometro_tempo = restante;
-        cronometro = setInterval(function() {
+        cronometro = setInterval(function () {
             if (crir === true) {
                 var regressiva = (cronometro_tempo - tempo_original) + 3;
                 if (regressiva > 0) {
@@ -883,8 +894,8 @@ var palco = function() {
         }, 1000);
     };
 
-    this.executaErros = function(erro) {
-        var switch_erro = (typeof(erro) == 'object' ? erro[0] : erro);
+    this.executaErros = function (erro) {
+        var switch_erro = (typeof (erro) == 'object' ? erro[0] : erro);
         switch (switch_erro) {
             case 'invalid_token':
                 $('#e_titulo').html('Isso não vale!');
@@ -945,7 +956,7 @@ var palco = function() {
         _self.defineTela('login');
     };
 
-    this.executaAcoes = function(data) {
+    this.executaAcoes = function (data) {
         if ((j = data.length)) {
             for (var a = 0; a <= j; a++) {
                 if ((q = data[a])) {
@@ -1133,7 +1144,7 @@ var palco = function() {
         }
     };
 
-    this.adicionaMensagem = function(nome, texto, conversa, especial) {
+    this.adicionaMensagem = function (nome, texto, conversa, especial) {
         var new_id = 0,
             mod_alt = null;
         if (conversa == true) {
@@ -1155,19 +1166,19 @@ var palco = function() {
         element.tinyscrollbar_update('bottom');
     };
 
-    this.tentaReconectar = function() {
+    this.tentaReconectar = function () {
         // numero de tentativas com erro
-        nte = (typeof(nte) == 'number' ? nte + 1 : 1);
+        nte = (typeof (nte) == 'number' ? nte + 1 : 1);
         if (nte == 4) {
             _self.executaErros('disconnected');
             return false;
         }
-        setTimeout(function() {
+        setTimeout(function () {
             _self.recebeDados();
         }, 5000);
     };
 
-    this.recebeDados = function() {
+    this.recebeDados = function () {
         if (tela != 'jogo') {
             return;
         }
@@ -1176,10 +1187,13 @@ var palco = function() {
             type: 'GET',
             url: API_ENDPOINT + 'recebe?token=' + dados_usuario.token,
             dataType: 'json',
-            error: function() {
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', "Bearer " + dados_usuario.jwtToken);
+            },
+            error: function () {
                 _self.tentaReconectar();
             },
-            success: function(res) {
+            success: function (res) {
                 var status = (res[0] ? res[0] : false);
                 switch (status) {
                     case 'success':
@@ -1221,7 +1235,7 @@ var palco = function() {
     	}
     };*/
 
-    this.enviaDados = function(dados) {
+    this.enviaDados = function (dados) {
         if (debug) {
             console.log(JSON.stringify(dados));
             return;
@@ -1236,8 +1250,11 @@ var palco = function() {
             data: {
                 'dados': JSON.stringify(dados)
             },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', "Bearer " + dados_usuario.jwtToken);
+            },
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 var status = res[0];
                 switch (status) {
                     case 'success':
@@ -1253,8 +1270,8 @@ var palco = function() {
         });
     };
 
-    this.gerenciador = function(ev) {
-        if (typeof(dados_usuario['id']) == 'undefined' || desenhista != dados_usuario.id || (ev.type == 'mousedown' && !palco_foco)) {
+    this.gerenciador = function (ev) {
+        if (typeof (dados_usuario['id']) == 'undefined' || desenhista != dados_usuario.id || (ev.type == 'mousedown' && !palco_foco)) {
             return;
         }
         if (ev.type == 'mousedown') {
@@ -1285,7 +1302,7 @@ var palco = function() {
 
         //console.log('debug3', ev._x, ev._y);
 
-        var ifClickOutStop = function() {
+        var ifClickOutStop = function () {
             if (ev.type == 'mousedown') {
                 stop = true;
             }
@@ -1312,7 +1329,7 @@ var palco = function() {
         }
     };
 
-    this.limpa = function(envia) {
+    this.limpa = function (envia) {
         desenhou = false;
         context.save();
         context.fillStyle = '#fff';
@@ -1327,13 +1344,13 @@ var palco = function() {
         }
     };
 
-    this.limpa2 = function() {
+    this.limpa2 = function () {
         context2.save();
         context2.clearRect(0, 0, canvas.width, canvas.height);
         context2.restore();
     };
 
-    this.desfaz = function(envia) {
+    this.desfaz = function (envia) {
         if (frames.length > 0) {
             var img = new Image();
 
@@ -1346,7 +1363,7 @@ var palco = function() {
 
             img.src = frames.pop();
 
-            img.onload = function() {
+            img.onload = function () {
                 context.save();
                 context.fillStyle = '#fff';
                 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -1363,7 +1380,7 @@ var palco = function() {
         }
     };
 
-    this.salvaFrame = function() {
+    this.salvaFrame = function () {
         desenhou = true;
 
         if (frames.length > 0) {
@@ -1378,7 +1395,7 @@ var palco = function() {
         }
     };
 
-    this.dadosPixel = function(x, y) {
+    this.dadosPixel = function (x, y) {
         var inicio = (y * (canvas.width * 4)) + (((x + 1) * 4) - 4);
         return {
             r: desenho.data[inicio],
@@ -1388,7 +1405,7 @@ var palco = function() {
         };
     };
 
-    this.pintaPixel = function(x, y) {
+    this.pintaPixel = function (x, y) {
         // Arredonda pois não tenho certeza como, mas algumas coordenadas estão vindo como decimal
         x = Math.ceil(x);
         y = Math.ceil(y);
@@ -1402,18 +1419,18 @@ var palco = function() {
         debuggingBox.update("pintaPixel color", "r: " + corAtual.r + ", g: " + corAtual.g + ", b: " + corAtual.b);
     };
 
-    this.revisaDesenho = function() {
+    this.revisaDesenho = function () {
         desenho = context.getImageData(0, 0, canvas.width, canvas.height);
         _self.salvaFrame();
     };
 
-    this.atualizaDesenho = function() {
+    this.atualizaDesenho = function () {
         console.log(desenho);
         context.putImageData(desenho, 0, 0);
         _self.salvaFrame();
     };
 
-    this.borracha = function(pontos) {
+    this.borracha = function (pontos) {
         var total_pontos, dados, a;
         total_pontos = pontos.length;
 
@@ -1448,7 +1465,7 @@ var palco = function() {
         }
     };
 
-    this.pincel = function(pontos) {
+    this.pincel = function (pontos) {
         var total_pontos, ultima, dados, a;
         total_pontos = pontos.length;
         ultima = false;
@@ -1485,7 +1502,7 @@ var palco = function() {
         _self.atualizaDesenho();
     };
 
-    this.linha = function(x, y, xo, yo, atualiza, envia) {
+    this.linha = function (x, y, xo, yo, atualiza, envia) {
         var x, y, xo, yo, xr, yr, n, m, xt, xt, ym;
 
         xr = x;
@@ -1548,7 +1565,7 @@ var palco = function() {
         }
     };
 
-    this.elipse_vazia = function(centro_x, centro_y, raio_x, raio_y, envia) {
+    this.elipse_vazia = function (centro_x, centro_y, raio_x, raio_y, envia) {
         if (raio_x < 0) {
             raio_x = raio_x * (-1);
         }
@@ -1595,7 +1612,7 @@ var palco = function() {
         }
     };
 
-    this.elipse_cheia = function(centro_x, centro_y, raio_x, raio_y, envia) {
+    this.elipse_cheia = function (centro_x, centro_y, raio_x, raio_y, envia) {
         if (raio_x < 0) {
             raio_x = raio_x * (-1);
         }
@@ -1642,7 +1659,7 @@ var palco = function() {
         }
     };
 
-    this.quadrado_vazio = function(x, y, w, h, envia) {
+    this.quadrado_vazio = function (x, y, w, h, envia) {
         debuggingBox.update("real_sqr", "x: " + x + ", y: " + y + ", w: " + w + ", h: " + h);
 
         var atual_x = x - 1;
@@ -1680,7 +1697,7 @@ var palco = function() {
         }
     };
 
-    this.quadrado_cheio = function(x, y, w, h, atualiza, envia) {
+    this.quadrado_cheio = function (x, y, w, h, atualiza, envia) {
         context.fillRect(x, y, w, h);
 
         if (atualiza !== false) {
@@ -1694,18 +1711,18 @@ var palco = function() {
         }
     };
 
-    this.balde = function(x, y, envia) {
+    this.balde = function (x, y, envia) {
         var __self = this;
         __self.pixelSelecionado = _self.dadosPixel(x, y);
 
-        this.pixelValido = function(x, y) {
+        this.pixelValido = function (x, y) {
             var selecionado = __self.pixelSelecionado;
             var checado = _self.dadosPixel(x, y);
 
             return (selecionado.r == checado.r && selecionado.g == checado.g && selecionado.b == checado.b);
         };
 
-        this.esquerda = function(x, y) {
+        this.esquerda = function (x, y) {
             for (var atual_x = x; atual_x >= 0; atual_x--) {
                 if (__self.pixelValido(atual_x, (y - 1))) {
                     __self.cima(atual_x, (y - 1));
@@ -1723,7 +1740,7 @@ var palco = function() {
             }
         };
 
-        this.direita = function(x, y) {
+        this.direita = function (x, y) {
             for (var atual_x = x; atual_x <= canvas.width; atual_x++) {
                 if (__self.pixelValido(atual_x, (y - 1))) {
                     __self.cima(atual_x, (y - 1));
@@ -1741,7 +1758,7 @@ var palco = function() {
             }
         };
 
-        this.cima = function(x, y) {
+        this.cima = function (x, y) {
             var obstaculo_esquerda = false;
             var obstaculo_direita = false;
 
@@ -1787,7 +1804,7 @@ var palco = function() {
             }
         };
 
-        this.baixo = function(x, y) {
+        this.baixo = function (x, y) {
             var obstaculo_esquerda = false;
             var obstaculo_direita = false;
 
@@ -1853,26 +1870,26 @@ var palco = function() {
         }
     };
 
-    ferramentas.balde = function() {
-        this.mousedown = function(ev) {
+    ferramentas.balde = function () {
+        this.mousedown = function (ev) {
             _self.balde(ev._x, ev._y);
         };
     };
 
-    ferramentas.seletor = function() {
-        this.mousedown = function(ev) {
+    ferramentas.seletor = function () {
+        this.mousedown = function (ev) {
             var dados = context.getImageData(0, 0, canvas.width, canvas.height).data;
             var inicio = (ev._y * (canvas.width * 4)) + (((ev._x + 1) * 4) - 4);
             alert('r: ' + dados[inicio] + ', g: ' + dados[inicio + 1] + ', b: ' + dados[inicio + 2] + ', a: ' + dados[inicio + 3]);
         };
     };
 
-    ferramentas.pincel = function() {
+    ferramentas.pincel = function () {
         var __self = this;
         __self.pontos = [];
         __self.clicando = false;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.pontos = [];
 
@@ -1885,7 +1902,7 @@ var palco = function() {
             }
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             if (__self.clicando) {
                 context2.lineTo(ev._x, ev._y);
                 context2.stroke();
@@ -1893,25 +1910,25 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             __self.clicando = false;
             _self.limpa2();
             _self.pincel(__self.pontos);
             __self.pontos = [];
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             __self.clicando = false;
         };
     };
 
-    ferramentas.borracha = function() {
+    ferramentas.borracha = function () {
         var __self = this;
         __self.pontos = [];
         __self.clicando = false;
         __self.corOriginal = false;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.corOriginal = context.strokeStyle;
             _self.defineCor('#fff', false);
@@ -1922,7 +1939,7 @@ var palco = function() {
             }
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             _self.limpa2();
             context2.beginPath();
             context2.rect(ev._x - 15, ev._y - 15, 30, 30);
@@ -1941,7 +1958,7 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             _self.defineCor(__self.corOriginal, false);
             __self.clicando = false;
             _self.revisaDesenho();
@@ -1949,7 +1966,7 @@ var palco = function() {
             __self.pontos = [];
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             _self.defineCor(__self.corOriginal, false);
             __self.clicando = false;
             _self.revisaDesenho();
@@ -1957,16 +1974,16 @@ var palco = function() {
             __self.pontos = [];
         };
 
-        this.changetool = function() {
+        this.changetool = function () {
             _self.limpa2();
         };
     };
 
-    ferramentas.linha = function() {
+    ferramentas.linha = function () {
         var __self = this;
         __self.clicando = false;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.x0 = ev._x;
             __self.y0 = ev._y;
@@ -1975,7 +1992,7 @@ var palco = function() {
             context2.moveTo(ev._x, ev._y);
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             if (__self.clicando) {
                 _self.limpa2();
                 context2.beginPath();
@@ -1985,27 +2002,27 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             __self.clicando = false;
             _self.limpa2();
             _self.linha(__self.x0, __self.y0, ev._x, ev._y);
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             __self.clicando = false;
         };
     };
 
-    ferramentas.elipse_vazia = function() {
+    ferramentas.elipse_vazia = function () {
         var __self = this;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.x0 = ev._x;
             __self.y0 = ev._y;
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             _self.limpa2();
 
             if (__self.clicando) {
@@ -2032,7 +2049,7 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             _self.limpa2();
             __self.clicando = false;
 
@@ -2044,21 +2061,21 @@ var palco = function() {
             _self.elipse_vazia(center_x, center_y, raio_x, raio_y);
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             __self.clicando = false;
         };
     };
 
-    ferramentas.elipse_cheia = function() {
+    ferramentas.elipse_cheia = function () {
         var __self = this;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.x0 = ev._x;
             __self.y0 = ev._y;
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             _self.limpa2();
 
             if (__self.clicando) {
@@ -2086,7 +2103,7 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             _self.limpa2();
             __self.clicando = false;
 
@@ -2099,21 +2116,21 @@ var palco = function() {
             _self.elipse_cheia(center_x, center_y, raio_x, raio_y);
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             __self.clicando = false;
         };
     };
 
-    ferramentas.quadrado_vazio = function() {
+    ferramentas.quadrado_vazio = function () {
         var __self = this;
 
-        this.mousedown = function(ev) {
+        this.mousedown = function (ev) {
             __self.clicando = true;
             __self.x0 = ev._x;
             __self.y0 = ev._y;
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             _self.limpa2();
 
             if (__self.clicando) {
@@ -2122,24 +2139,24 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             __self.clicando = false;
             _self.quadrado_vazio(Math.min(ev._x, __self.x0), Math.min(ev._y, __self.y0), Math.abs(ev._x - __self.x0), Math.abs(ev._y - __self.y0));
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             __self.clicando = false;
         };
     };
 
-    ferramentas.quadrado_cheio = function() {
-        this.mousedown = function(ev) {
+    ferramentas.quadrado_cheio = function () {
+        this.mousedown = function (ev) {
             this.clicando = true;
             this.x0 = ev._x;
             this.y0 = ev._y;
         };
 
-        this.mousemove = function(ev) {
+        this.mousemove = function (ev) {
             _self.limpa2();
 
             if (this.clicando) {
@@ -2147,17 +2164,17 @@ var palco = function() {
             }
         };
 
-        this.mouseup = function(ev) {
+        this.mouseup = function (ev) {
             this.clicando = false;
             _self.quadrado_cheio(Math.min(ev._x, this.x0), Math.min(ev._y, this.y0), Math.abs(ev._x - this.x0), Math.abs(ev._y - this.y0));
         };
 
-        this.mouseout = function(ev) {
+        this.mouseout = function (ev) {
             this.clicando = false;
         };
     };
 
-    this.rgb2hex = function(r, g, b) {
+    this.rgb2hex = function (r, g, b) {
         var rgb = [r.toString(16), g.toString(16), b.toString(16)];
 
         for (var i = 0; i < 3; i++) {
@@ -2169,7 +2186,7 @@ var palco = function() {
         return '#' + rgb[0] + rgb[1] + rgb[2];
     };
 
-    this.hex2rgb = function(shex) {
+    this.hex2rgb = function (shex) {
         if (shex[0] == "#") hex = shex.substr(1);
         if (hex.length == 3) {
             var temp = hex;
@@ -2185,7 +2202,7 @@ var palco = function() {
         };
     };
 
-    this.defineCor = function(value, envia) {
+    this.defineCor = function (value, envia) {
         if (context.strokeStyle == value) {
             return;
         }
@@ -2199,14 +2216,14 @@ var palco = function() {
         }
     };
 
-    this.defineTamanho = function(value) {
+    this.defineTamanho = function (value) {
         if (value > 0 && value <= 20) {
             context.lineWidth = value;
             tamanho = value;
         }
     };
 
-    this.defineFerramenta = function(value) {
+    this.defineFerramenta = function (value) {
         if (ferramentas[value]) {
             var func = ferramentaObj['changetool'];
             if (func) func();
@@ -2222,16 +2239,19 @@ RecaptchaOptions = {
     custom_theme_widget: 'recaptcha_widget'
 };
 
-$('document').ready(function() {
+$('document').ready(function () {
 
     palco = new palco();
     palco.inicia();
     //palco.defineTela('intermediaria');
 });
 
-window.onbeforeunload = function() {
+window.onbeforeunload = function () {
     $.ajax({
         url: API_ENDPOINT + 'sair',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', "Bearer " + dados_usuario.jwtToken);
+        },
         async: false
     });
 };
