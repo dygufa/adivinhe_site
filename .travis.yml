@@ -3,9 +3,8 @@ before_script:
 - gem install rake
 deploy:
   provider: s3
-  access_key_id: AKIAWGXRQVPJQXGMCJP6
-  secret_access_key:
-    secure: PDfuji6xGE4W0S+HjPGbBC37zcXq/wWHuCuFNAfLD2e+7FdTKRScCZLLbW7mxwr+CahfefYttBabKhH2thjg89zt1FENsG/qdQMisaKzb/WGH8SoDD+0qUKszNdpRkquyrI2UnqOCSpfdcZjyRzksrGtzVwIy2SbyBWBBAabMV/vb+qTefK+3heyB+JLbfLyQ1UTZ0jI+4+nE7meuVT7PLu5U4ZiBXH8sQzy0hN+al3cggAKoiXZsfFAIpX2xMX9GUfPM7qOCaJGKwG+eDoFC2JOM9SOtSFiBN4LwiwJcYaJyVuN/6NQGslLKdmJzy94J31sxI0+nscx11nrX3I4JU27T9J4y/jCxzo6nHD1Mvp1TiqIm03owzY/Cdk6tBs02XUFIc3xxYqgf9TnlLLnMPqVpEjRzL7B64Dz2oB6xe+n9it0YPpD1qzqOSQBUI9LTcIWtCnzuKjqVJhyyGI4QROWYkqbKS5AcdlgtWtzfG2TL2DCpu0mIeFEfxeh+RAfzto7iC3b+HxrBZiQkeAKel4rE2WWK15mIPqmqJ1IDKQUKzrlgMj21eUnlIm4Wd3e0yi64EZCY1qXkVdt1y9RKBiW8qJu8ff1aiZzB9VRE72VW7mjpQpSu4M6t9Vy9giEvWv3LQ9Oe/Y1gU8YzC08Wm3DIcewfRF6AxxlZUNcV70=
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: adivinhe-site
   skip_cleanup: true
   acl: public_read
